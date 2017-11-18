@@ -16,7 +16,8 @@ class App:
 
     @staticmethod
     def open_file():
-        file_object = tkinter.filedialog.askopenfile(mode='r')
+        file_object = tkinter.filedialog\
+            .askopenfile(mode='r', filetypes=[("All Files", "*.*"), ("MS Word", "*.doc;*.docx")])
         print(file_object)
 
 
