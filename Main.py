@@ -28,8 +28,8 @@ class App:
             file_name = input_file_name
             input_dir.delete(0, END)
             input_dir.insert(0, file_name)
-            te = TextExtractor(file_name)
-            te.process_text()
+            tc = TextExtractor(file_name)
+            tc.process_text()
 
 
 parent = Tk()
