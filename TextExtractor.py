@@ -18,15 +18,14 @@ class TextExtractor:
 
             # print(block.text if isinstance(block, Paragraph) else '<table>')
             if isinstance(block, Paragraph):
-                # print(block.text)
                 self.add_markups(block.runs)
             elif isinstance(block, Table):
                 for row in block.rows:
                     row_data = []
                     for cell in row.cells:
                         for paragraph in cell.paragraphs:
-                            row_data.append(paragraph.text)
-                    print("\t".join(row_data))
+                            # row_data.append(paragraph.text)
+                            self.add_markups(paragraph.runs)
             print("\n")
 
     @staticmethod
@@ -50,22 +49,15 @@ class TextExtractor:
     def add_markups(chunk):
         item = []
         for run in chunk:
-            item.append(run.text)
-        print(item)
+            formatted_run = run.text
+            if run.underline:
+                formatted_run = "<u>" + formatted_run + "</u>"
+            if run.bold:
+                formatted_run = "<b>" + formatted_run + "</b>"
+            if run.italic:
+                formatted_run = "<i>" + formatted_run + "</i>"
 
-        '''
-        for paragraph in doc.paragraphs:
-            item = []
-            for run in paragraph.runs:
-                if run.bold:
-                    item.append("<b>"+run.text+"</b>")
-                elif run.italic:
-                    item.append("<i>" + run.text + "</i>")
-                elif run.underline:
-                    item.append("<u>" + run.text + "</u>")
-                else:
-                    item.append(run.text)
+            item.append(formatted_run)
+        joined_item = "".join(item)
+        print(joined_item.replace("</b><b>", ""))
 
-            joined_item = "".join(item)
-            print(joined_item.replace("</b><b>", ""))
-            '''
