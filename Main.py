@@ -32,6 +32,6 @@ class App:
             tc.process_text()
 
 
-parent = Tk()
-app = App(parent)
-parent.mainloop()
+root = Tk()
+app = App(root)
+root.mainloop()
