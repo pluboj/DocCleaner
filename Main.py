@@ -18,6 +18,8 @@ class App:
         input_dir.grid(row=0, column=1, padx=2, pady=2, sticky='we', columnspan=9)
         Button(master, text="Select File",
                command=self.open_file).grid(row=0, column=10, sticky='e' + 'w', padx=10, pady=2)
+        Button(master, text="Process File",
+               command=self.submit_file).grid(row=1, column=10, sticky='e' + 'w', padx=10, pady=2)
 
     @staticmethod
     def open_file(event=None):
@@ -28,6 +30,11 @@ class App:
             file_name = input_file_name
             input_dir.delete(0, END)
             input_dir.insert(0, file_name)
+
+    @staticmethod
+    def submit_file():
+        global input_dir
+        if input_dir.get() != "":
             tc = TextExtractor(file_name)
             tc.process_text()
 

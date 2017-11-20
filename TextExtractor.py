@@ -13,20 +13,24 @@ class TextExtractor:
 
     def process_text(self):
         document = Document(self.filename)
+        path = self.filename.split('/')
+        path[-1] = "DOC.docx"
+        file_path = '/'.join(path)
+        new_doc = Document()
 
         for block in self.iter_block_items(document):
 
             # print(block.text if isinstance(block, Paragraph) else '<table>')
             if isinstance(block, Paragraph):
-                self.add_markups(block.runs)
+                new_doc.add_paragraph(self.add_markups(block.runs))
             elif isinstance(block, Table):
                 for row in block.rows:
                     row_data = []
                     for cell in row.cells:
                         for paragraph in cell.paragraphs:
-                            # row_data.append(paragraph.text)
-                            self.add_markups(paragraph.runs)
-            print("\n")
+                            new_doc.add_paragraph(self.add_markups(paragraph.runs))
+
+        new_doc.save(file_path)
 
     @staticmethod
     def iter_block_items(parent):
@@ -45,8 +49,7 @@ class TextExtractor:
             elif isinstance(child, CT_Tbl):
                 yield Table(child, parent)
 
-    @staticmethod
-    def add_markups(chunk):
+    def add_markups(self, chunk):
         item = []
         for run in chunk:
             formatted_run = run.text
@@ -59,5 +62,4 @@ class TextExtractor:
 
             item.append(formatted_run)
         joined_item = "".join(item)
-        print(joined_item.replace("</b><b>", ""))
-
+        return joined_item.replace("</b><b>", "")
