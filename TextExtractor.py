@@ -22,13 +22,17 @@ class TextExtractor:
 
             # print(block.text if isinstance(block, Paragraph) else '<table>')
             if isinstance(block, Paragraph):
-                new_doc.add_paragraph(self.add_markups(block.runs))
+                formatted_block = self.add_markups(block.runs)
+                if formatted_block is not "":
+                    new_doc.add_paragraph(formatted_block)
             elif isinstance(block, Table):
                 for row in block.rows:
                     row_data = []
                     for cell in row.cells:
                         for paragraph in cell.paragraphs:
-                            new_doc.add_paragraph(self.add_markups(paragraph.runs))
+                            formatted_para = self.add_markups(paragraph.runs)
+                            if formatted_para is not "":
+                                new_doc.add_paragraph(formatted_para)
 
         new_doc.save(file_path)
 
@@ -56,10 +60,14 @@ class TextExtractor:
             if run.underline:
                 formatted_run = "<u>" + formatted_run + "</u>"
             if run.bold:
-                formatted_run = "<b>" + formatted_run + "</b>"
+                formatted_run = "<strong>" + formatted_run + "</strong>"
             if run.italic:
-                formatted_run = "<i>" + formatted_run + "</i>"
+                formatted_run = "<em>" + formatted_run + "</em>"
 
             item.append(formatted_run)
         joined_item = "".join(item)
-        return joined_item.replace("</b><b>", "")
+        joined_item = joined_item.replace("</strong><strong>", "").replace("</em><em>", "") \
+            .replace("</u><u>", "")
+        if len(joined_item) == 1 and joined_item.upper() == 'O':
+            return ''
+        return joined_item
