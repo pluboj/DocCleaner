@@ -56,13 +56,16 @@ class TextExtractor:
     def add_markups(self, chunk):
         item = []
         for run in chunk:
-            formatted_run = run.text
-            if run.underline:
-                formatted_run = "<u>" + formatted_run + "</u>"
-            if run.bold:
-                formatted_run = "<strong>" + formatted_run + "</strong>"
-            if run.italic:
-                formatted_run = "<em>" + formatted_run + "</em>"
+            if len(run.text) == 1 and run.text.upper() == 'O':
+                continue
+            else:
+                formatted_run = run.text
+                if run.underline:
+                    formatted_run = "<u>" + formatted_run + "</u>"
+                if run.bold:
+                    formatted_run = "<strong>" + formatted_run + "</strong>"
+                if run.italic:
+                    formatted_run = "<em>" + formatted_run + "</em>"
 
             item.append(formatted_run)
         joined_item = "".join(item)
